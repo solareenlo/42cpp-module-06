@@ -1,0 +1,8 @@
+obj
+*.bak
+*.png
+compile_commands.json
+.ccls*
+*.out
+*.hpp.gch
+test*
