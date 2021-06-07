@@ -6,14 +6,16 @@
 /*   By: tayamamo <tayamamo@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 14:01:30 by tayamamo          #+#    #+#             */
-/*   Updated: 2021/06/07 14:14:14 by tayamamo         ###   ########.fr       */
+/*   Updated: 2021/06/08 06:36:48 by tayamamo         ###   ########.fr       */
 /*   Copyright 2021                                                           */
 /* ************************************************************************** */
 
 #include "ScalarConversion.hpp"
 
 ScalarConversion::ScalarConversion()
-    : is_valid_num_(false), str_(""), type_(0) {}
+    : is_valid_num_(false), str_("0"), type_(kChar) {
+        this->val_.c_ = '\0';
+}
 
 ScalarConversion::ScalarConversion(std::string const& str) : str_(str) {
     this->is_valid_num_ = this->isValidNumber(str);
@@ -21,6 +23,7 @@ ScalarConversion::ScalarConversion(std::string const& str) : str_(str) {
         throw ScalarConversion::SCException
             ("Error: non displayable characters can't be passed");
     }
+    this->type_ = this->detectType(str);
 }
 
 ScalarConversion::~ScalarConversion() {}
@@ -44,16 +47,44 @@ bool    ScalarConversion::isValidNumber(std::string const& str) {
     double d = std::strtod(str.c_str(), &endptr);
     (void)d;
     if (errno)
-        flag = false;
+        throw ScalarConversion::SCException("Error: fatal");
     if (*endptr && !(*endptr == 'f' && *(endptr + 1) == '\0'))
+        flag = false;
+    if (*endptr && str.size() == 1)
         flag = false;
     return (flag);
 }
 
 int ScalarConversion::detectType(std::string const& str) {
-    if (!str.compare("-inff"))
-        this->type_ = kFloat;
-    return (0);
+    if (!str.compare("-inff") || !str.compare("+inff")
+            || !str.compare("inff") || !str.compare("nanf"))
+        return (kFloat);
+
+    if (!str.compare("-inf") || !str.compare("+inf")
+            || !str.compare("inf") || !str.compare("nan"))
+        return (kDouble);
+
+    char    *endptr;
+    errno = 0;
+    double d = std::strtod(str.c_str(), &endptr);
+    (void)d;
+    if (errno)
+        throw ScalarConversion::SCException("Error: fatal");
+    if (*endptr == 'f')
+        return (kFloat);
+
+    if (d > std::numeric_limits<int>::max()
+            || d < std::numeric_limits<int>::min())
+        return (kDouble);
+
+    int i = std::strtol(str.c_str(), &endptr, this->base_);
+    (void)i;
+    errno = 0;
+    if (errno)
+        throw ScalarConversion::SCException("Error: fatal");
+    if (*endptr == '.')
+        return (kDouble);
+    return (kInt);
 }
 
 void    ScalarConversion::output() {

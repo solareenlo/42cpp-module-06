@@ -6,7 +6,7 @@
 /*   By: tayamamo <tayamamo@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 14:00:47 by tayamamo          #+#    #+#             */
-/*   Updated: 2021/06/07 10:13:07 by tayamamo         ###   ########.fr       */
+/*   Updated: 2021/06/08 06:09:15 by tayamamo         ###   ########.fr       */
 /*   Copyright 2021                                                           */
 /* ************************************************************************** */
 
@@ -25,6 +25,13 @@ enum : int {
   kInt,
   kFloat,
   kDouble,
+};
+
+union   UniVal  {
+    char    c_;
+    int     i_;
+    float   f_;
+    double  d_;
 };
 
 class   ScalarConversion {
@@ -58,8 +65,9 @@ class   ScalarConversion {
     ScalarConversion();
     bool                is_valid_num_;
     std::string const   str_;
-    static const int    base_ = 10;
     int                 type_;
+    UniVal              val_;
+    static const int    base_ = 10;
     std::string         getStr() const;
     int                 getBase() const;
     bool                getIsValidNum() const;
