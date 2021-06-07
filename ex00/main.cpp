@@ -6,7 +6,7 @@
 /*   By: tayamamo <tayamamo@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 14:00:00 by tayamamo          #+#    #+#             */
-/*   Updated: 2021/06/06 14:07:41 by tayamamo         ###   ########.fr       */
+/*   Updated: 2021/06/07 10:45:56 by tayamamo         ###   ########.fr       */
 /*   Copyright 2021                                                           */
 /* ************************************************************************** */
 
@@ -20,5 +20,12 @@ int main(int argc, char *argv[]) {
         std::cout << argv[0] << " \"string\"" << std::endl;
         return (EXIT_FAILURE);
     }
+
+    ScalarConversion    scalar(argv[1]);
+
+    scalar.asChar();
+    scalar.asInt();
+    scalar.asFloat();
+    scalar.asDboule();
     return (0);
 }
