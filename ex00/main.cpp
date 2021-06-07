@@ -21,11 +21,15 @@ int main(int argc, char *argv[]) {
         return (EXIT_FAILURE);
     }
 
-    ScalarConversion    scalar(argv[1]);
-
-    scalar.asChar();
-    scalar.asInt();
-    scalar.asFloat();
-    scalar.asDboule();
+    try {
+        ScalarConversion    scalar(argv[1]);
+        scalar.asChar();
+        scalar.asInt();
+        scalar.asFloat();
+        scalar.asDboule();
+    }
+    catch (ScalarConversion::SCException& e) {
+        std::cout << e.what() << std::endl;
+    }
     return (0);
 }

@@ -20,6 +20,13 @@
 #include <cstdlib>
 #include <cerrno>
 
+enum : int {
+  kChar,
+  kInt,
+  kFloat,
+  kDouble,
+};
+
 class   ScalarConversion {
  public:
     explicit ScalarConversion(std::string const& str);
@@ -27,20 +34,11 @@ class   ScalarConversion {
     ~ScalarConversion();
     ScalarConversion&   operator=(ScalarConversion const& right);
 
+    void    output();
     void    asChar();
     void    asInt();
     void    asFloat();
     void    asDboule();
-
- private:
-    ScalarConversion();
-    bool                is_valid_num_;
-    std::string const   str_;
-    static const int    base_ = 10;
-    std::string         getStr() const;
-    int                 getBase() const;
-    bool                getIsValidNum() const;
-    bool                isValidNumber(std::string const& str);
 
     class   SCException : public std::exception {
      public:
@@ -55,6 +53,18 @@ class   ScalarConversion {
         std::string message_;
         std::string getMessage() const;
     };
+
+ private:
+    ScalarConversion();
+    bool                is_valid_num_;
+    std::string const   str_;
+    static const int    base_ = 10;
+    int                 type_;
+    std::string         getStr() const;
+    int                 getBase() const;
+    bool                getIsValidNum() const;
+    bool                isValidNumber(std::string const& str);
+    int                 detectType(std::string const& str);
 };
 
 #endif  // EX00_SCALARCONVERSION_HPP_

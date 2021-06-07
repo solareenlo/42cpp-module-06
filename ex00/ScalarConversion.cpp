@@ -12,10 +12,15 @@
 
 #include "ScalarConversion.hpp"
 
-ScalarConversion::ScalarConversion() : is_valid_num_(false), str_("") {}
+ScalarConversion::ScalarConversion()
+    : is_valid_num_(false), str_(""), type_(0) {}
 
 ScalarConversion::ScalarConversion(std::string const& str) : str_(str) {
     this->is_valid_num_ = this->isValidNumber(str);
+    if (!this->is_valid_num_) {
+        throw ScalarConversion::SCException
+            ("Error: non displayable characters can't be passed");
+    }
 }
 
 ScalarConversion::~ScalarConversion() {}
@@ -43,6 +48,15 @@ bool    ScalarConversion::isValidNumber(std::string const& str) {
     if (*endptr && !(*endptr == 'f' && *(endptr + 1) == '\0'))
         flag = false;
     return (flag);
+}
+
+int ScalarConversion::detectType(std::string const& str) {
+    if (!str.compare("-inff"))
+        this->type_ = kFloat;
+    return (0);
+}
+
+void    ScalarConversion::output() {
 }
 
 void    ScalarConversion::asChar() {
