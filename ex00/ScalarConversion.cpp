@@ -6,7 +6,7 @@
 /*   By: tayamamo <tayamamo@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 14:01:30 by tayamamo          #+#    #+#             */
-/*   Updated: 2021/06/08 06:36:48 by tayamamo         ###   ########.fr       */
+/*   Updated: 2021/06/08 07:37:14 by tayamamo         ###   ########.fr       */
 /*   Copyright 2021                                                           */
 /* ************************************************************************** */
 
@@ -24,6 +24,23 @@ ScalarConversion::ScalarConversion(std::string const& str) : str_(str) {
             ("Error: non displayable characters can't be passed");
     }
     this->type_ = this->detectType(str);
+    if (this->type_ == kChar) {
+        this->val_.c_ = *(this->str_.c_str());
+    } else if (this->type_ == kInt) {
+        this->val_.i_ = std::atoi(str.c_str());
+    } else if (this->type_ == kFloat) {
+        char    *endptr;
+        errno = 0;
+        this->val_.f_ = std::strtof(str.c_str(), &endptr);
+        if (errno)
+            throw ScalarConversion::SCException("Error: fatal");
+    } else {
+        char    *endptr;
+        errno = 0;
+        this->val_.d_ = std::strtod(str.c_str(), &endptr);
+        if (errno)
+            throw ScalarConversion::SCException("Error: fatal");
+    }
 }
 
 ScalarConversion::~ScalarConversion() {}
@@ -67,7 +84,6 @@ int ScalarConversion::detectType(std::string const& str) {
     char    *endptr;
     errno = 0;
     double d = std::strtod(str.c_str(), &endptr);
-    (void)d;
     if (errno)
         throw ScalarConversion::SCException("Error: fatal");
     if (*endptr == 'f')
@@ -78,13 +94,16 @@ int ScalarConversion::detectType(std::string const& str) {
         return (kDouble);
 
     int i = std::strtol(str.c_str(), &endptr, this->base_);
-    (void)i;
     errno = 0;
     if (errno)
         throw ScalarConversion::SCException("Error: fatal");
     if (*endptr == '.')
         return (kDouble);
-    return (kInt);
+
+    if (i > std::numeric_limits<char>::max()
+            || i < std::numeric_limits<char>::min())
+        return (kInt);
+    return (kChar);
 }
 
 void    ScalarConversion::output() {
@@ -129,12 +148,11 @@ void    ScalarConversion::asFloat() {
     try {
         char    *endptr;
         errno = 0;
-        float f = std::strtol(this->str_.c_str(), &endptr, this->getBase());
+        float f = std::strtof(this->str_.c_str(), &endptr);
         if (errno || !this->getIsValidNum()) {
             throw ScalarConversion::SCException("impossible");
-            throw ScalarConversion::SCException("impossible");
         }
-        std::cout << static_cast<float>(f) << std::endl;
+        std::cout << f << std::endl;
     }
     catch (ScalarConversion::SCException& e) {
         std::cout << e.what() << std::endl;
