@@ -12,23 +12,49 @@
 
 #include "ScalarConversion.hpp"
 
-ScalarConversion::ScalarConversion() : str_("") {}
-ScalarConversion::ScalarConversion(std::string const& str) : str_(str) {}
+ScalarConversion::ScalarConversion() : is_valid_num_(false), str_("") {}
+
+ScalarConversion::ScalarConversion(std::string const& str) : str_(str) {
+    this->is_valid_num_ = this->isValidNumber(str);
+}
+
 ScalarConversion::~ScalarConversion() {}
+
 ScalarConversion::ScalarConversion(ScalarConversion const& src) {
     this->operator=(src);
 }
 
 ScalarConversion&
 ScalarConversion::operator=(ScalarConversion const& right) {
-    if (this != &right) {;}
+    if (this != &right) {
+        this->is_valid_num_ = right.is_valid_num_;
+    }
     return (*this);
+}
+
+bool    ScalarConversion::isValidNumber(std::string const& str) {
+    bool    flag = true;
+    char    *endptr;
+    errno = 0;
+    double d = std::strtod(str.c_str(), &endptr);
+    (void)d;
+    if (errno)
+        flag = false;
+    if (*endptr && !(*endptr == 'f' && *(endptr + 1) == '\0'))
+        flag = false;
+    return (flag);
 }
 
 void    ScalarConversion::asChar() {
     std::cout << "char: ";
     try {
-        std::cout << (static_cast<char>(std::atoi(this->str_.c_str()))) << std::endl;
+        if (!this->getIsValidNum())
+            throw ScalarConversion::SCException("impossible");
+        int i = std::atoi(this->str_.c_str());
+        if (i < 32 || 126 < i)
+            throw ScalarConversion::SCException("Non displayable");
+        std::cout << "'" << (static_cast<char>(std::atoi(this->str_.c_str())))
+            << "'" << std::endl;
     }
     catch (ScalarConversion::SCException& e) {
         std::cout << e.what() << std::endl;
@@ -41,7 +67,8 @@ void    ScalarConversion::asInt() {
         char    *endptr;
         errno = 0;
         int64_t l = std::strtol(this->str_.c_str(), &endptr, this->getBase());
-        if (errno || l > std::numeric_limits<int>::max()
+        if (!this->getIsValidNum() || errno
+                || l > std::numeric_limits<int>::max()
                 || l < std::numeric_limits<int>::min()) {
             throw ScalarConversion::SCException("impossible");
         }
@@ -58,7 +85,8 @@ void    ScalarConversion::asFloat() {
         char    *endptr;
         errno = 0;
         float f = std::strtol(this->str_.c_str(), &endptr, this->getBase());
-        if (errno) {
+        if (errno || !this->getIsValidNum()) {
+            throw ScalarConversion::SCException("impossible");
             throw ScalarConversion::SCException("impossible");
         }
         std::cout << static_cast<float>(f) << std::endl;
@@ -74,7 +102,7 @@ void    ScalarConversion::asDboule() {
         char    *endptr;
         errno = 0;
         double  d = std::strtod(this->str_.c_str(), &endptr);
-        if (errno) {
+        if (errno || !this->getIsValidNum()) {
             throw ScalarConversion::SCException("impossible");
         }
         std::cout << d << std::endl;
@@ -86,6 +114,10 @@ void    ScalarConversion::asDboule() {
 
 std::string ScalarConversion::getStr() const { return (this->str_); }
 int         ScalarConversion::getBase() const { return (this->base_); }
+
+bool    ScalarConversion::getIsValidNum() const {
+    return (this->is_valid_num_);
+}
 
 ScalarConversion::SCException::SCException()
     : std::exception(), message_("error") {}

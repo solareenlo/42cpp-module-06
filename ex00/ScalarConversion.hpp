@@ -34,10 +34,13 @@ class   ScalarConversion {
 
  private:
     ScalarConversion();
+    bool                is_valid_num_;
     std::string const   str_;
     static const int    base_ = 10;
     std::string         getStr() const;
     int                 getBase() const;
+    bool                getIsValidNum() const;
+    bool                isValidNumber(std::string const& str);
 
     class   SCException : public std::exception {
      public:
