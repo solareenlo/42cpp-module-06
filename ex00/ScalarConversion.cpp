@@ -6,7 +6,7 @@
 /*   By: tayamamo <tayamamo@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 14:01:30 by tayamamo          #+#    #+#             */
-/*   Updated: 2021/06/08 07:37:14 by tayamamo         ###   ########.fr       */
+/*   Updated: 2021/06/08 12:29:07 by tayamamo         ###   ########.fr       */
 /*   Copyright 2021                                                           */
 /* ************************************************************************** */
 
@@ -106,14 +106,9 @@ int ScalarConversion::detectType(std::string const& str) {
     return (kChar);
 }
 
-void    ScalarConversion::output() {
-}
-
 void    ScalarConversion::asChar() {
     std::cout << "char: ";
     try {
-        if (!this->getIsValidNum())
-            throw ScalarConversion::SCException("impossible");
         int i = std::atoi(this->str_.c_str());
         if (i < 32 || 126 < i)
             throw ScalarConversion::SCException("Non displayable");
@@ -131,8 +126,7 @@ void    ScalarConversion::asInt() {
         char    *endptr;
         errno = 0;
         int64_t l = std::strtol(this->str_.c_str(), &endptr, this->getBase());
-        if (!this->getIsValidNum() || errno
-                || l > std::numeric_limits<int>::max()
+        if (l > std::numeric_limits<int>::max()
                 || l < std::numeric_limits<int>::min()) {
             throw ScalarConversion::SCException("impossible");
         }
@@ -149,9 +143,6 @@ void    ScalarConversion::asFloat() {
         char    *endptr;
         errno = 0;
         float f = std::strtof(this->str_.c_str(), &endptr);
-        if (errno || !this->getIsValidNum()) {
-            throw ScalarConversion::SCException("impossible");
-        }
         std::cout << f << std::endl;
     }
     catch (ScalarConversion::SCException& e) {
@@ -165,9 +156,6 @@ void    ScalarConversion::asDboule() {
         char    *endptr;
         errno = 0;
         double  d = std::strtod(this->str_.c_str(), &endptr);
-        if (errno || !this->getIsValidNum()) {
-            throw ScalarConversion::SCException("impossible");
-        }
         std::cout << d << std::endl;
     }
     catch (ScalarConversion::SCException& e) {
@@ -175,12 +163,9 @@ void    ScalarConversion::asDboule() {
     }
 }
 
-std::string ScalarConversion::getStr() const { return (this->str_); }
 int         ScalarConversion::getBase() const { return (this->base_); }
-
-bool    ScalarConversion::getIsValidNum() const {
-    return (this->is_valid_num_);
-}
+std::string ScalarConversion::getStr() const { return (this->str_); }
+int         ScalarConversion::getType() const { return (this->type_); }
 
 ScalarConversion::SCException::SCException()
     : std::exception(), message_("error") {}

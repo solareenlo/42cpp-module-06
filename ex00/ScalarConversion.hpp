@@ -6,7 +6,7 @@
 /*   By: tayamamo <tayamamo@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 14:00:47 by tayamamo          #+#    #+#             */
-/*   Updated: 2021/06/08 07:36:33 by tayamamo         ###   ########.fr       */
+/*   Updated: 2021/06/08 12:29:10 by tayamamo         ###   ########.fr       */
 /*   Copyright 2021                                                           */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ class   ScalarConversion {
     ~ScalarConversion();
     ScalarConversion&   operator=(ScalarConversion const& right);
 
-    void    output();
     void    asChar();
     void    asInt();
     void    asFloat();
@@ -68,9 +67,9 @@ class   ScalarConversion {
     int                 type_;
     union UniVal        val_;
     static const int    base_ = 10;
-    std::string         getStr() const;
     int                 getBase() const;
-    bool                getIsValidNum() const;
+    std::string         getStr() const;
+    int                 getType() const;
     bool                isValidNumber(std::string const& str);
     int                 detectType(std::string const& str);
 };
