@@ -6,3 +6,5 @@ compile_commands.json
 *.out
 *.hpp.gch
 test*
+
+convert
