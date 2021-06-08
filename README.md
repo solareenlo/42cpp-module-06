@@ -1,15 +1,20 @@
 # 42cpp-module-06
 
 ### ex00
+##### 方針
 - `-inf` < `-DBL_MAX` < `-inff` < `-FLT_MAX` < `INT_MIN` < `CHR_MIN` < `-FLT_MIN` < `-DBL_MIN` < `0` < `DBL_MIN` < `FLT_MIN` < `CHR_MIN` < `INT_MAX` < `FLT_MAX` < `+inff` < `DBL_MAX` < `+inf`
 - このような大小関係で `char`, `int`, `float`, `double` に値を設定したり，キャストしたりした場合に範囲外になるとエラーにした
 - `int` にキャストした場合は小数点以下が切り捨て
 - `nan`, `+nan`, `-nan`, `nanf`, `+nanf`, `-nanf` は例外処理
+- long は `2^24` までしか整数を正しく保存することができない
+  - 仮数部が 23 bit までしかないので
+- double は `2^53` までしか整数を正しく保存することができない
+  - 仮数部が 52 bit までしかないので
 
-##### 小数点の桁数表示
+#### 小数点の桁数表示
 - [【C++】小数点の桁数を指定する方法と注意点【cout／iostream】](https://marycore.jp/prog/cpp/stream-format-float/)
 
-##### float
+#### float
 - [Convert INT_MAX to float and then back to integer.](https://stackoverflow.com/questions/23420783/convert-int-max-to-float-and-then-back-to-integer/23423240)
 - [int to float conversion produces a warning?](https://stackoverflow.com/questions/7775129/int-to-float-conversion-produces-a-warning)
 - [FLP34-C. 浮動小数点の型変換は変換後の型の範囲に収まるようにする](https://www.jpcert.or.jp/sc-rules/c-flp34-c.html)
@@ -65,13 +70,13 @@ a=-16777212 c=-16777212 b=0x11111111000000000000000000000100
 a=-16777211 c=-16777211 b=0x11111111000000000000000000000101
 ```
 
-##### union
+#### union
 - [Can a union be initialized in the declaration?](https://stackoverflow.com/questions/2148989/can-a-union-be-initialized-in-the-declaration)
 
-##### max, min
+#### max, min
 - [std::numeric_limits](https://cpprefjp.github.io/reference/limits/numeric_limits.html)
 
-##### 型変換
+#### 型変換
 - [strtol](http://www9.plala.or.jp/sgwr-t/lib/strtol.html)
 - [strtod](http://www9.plala.or.jp/sgwr-t/lib/strtod.html)
 - INT_MIN, INT_MAX は C++03, C++11 から
