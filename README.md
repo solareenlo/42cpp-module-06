@@ -1,7 +1,7 @@
 # 42cpp-module-06
 
 ### ex00
-##### 方針
+#### 方針
 - `-inf` < `-DBL_MAX` < `-inff` < `-FLT_MAX` < `INT_MIN` < `CHR_MIN` < `-FLT_MIN` < `-DBL_MIN` < `0` < `DBL_MIN` < `FLT_MIN` < `CHR_MIN` < `INT_MAX` < `FLT_MAX` < `+inff` < `DBL_MAX` < `+inf`
 - このような大小関係で `char`, `int`, `float`, `double` に値を設定したり，キャストしたりした場合に範囲外になるとエラーにした
 - `int` にキャストした場合は小数点以下が切り捨て
