@@ -6,7 +6,7 @@
 /*   By: tayamamo <tayamamo@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 14:01:30 by tayamamo          #+#    #+#             */
-/*   Updated: 2021/06/09 02:44:23 by tayamamo         ###   ########.fr       */
+/*   Updated: 2021/06/09 04:24:53 by tayamamo         ###   ########.fr       */
 /*   Copyright 2021                                                           */
 /* ************************************************************************** */
 
@@ -35,12 +35,14 @@ ScalarConversion::ScalarConversion(std::string const& str)
         this->val_.f_ = std::strtof(str.c_str(), &endptr);
         if (errno)
             throw ScalarConversion::SCException("Error: out of range (float)");
+        this->setPrecision(str);
     } else if (this->type_ == kDouble) {
         char    *endptr;
         errno = 0;
         this->val_.d_ = std::strtod(str.c_str(), &endptr);
         if (errno)
             throw ScalarConversion::SCException("Error: out of range (double)");
+        this->setPrecision(str);
     }
 }
 
@@ -207,9 +209,11 @@ void    ScalarConversion::asFloat() {
                 throw ScalarConversion::SCException("impossible");
             if (this->val_.d_ < -std::numeric_limits<float>::max())
                 throw ScalarConversion::SCException("impossible");
-            if (this->val_.d_ < std::numeric_limits<float>::min()
-                    && this->val_.d_ > -std::numeric_limits<float>::min())
-                throw ScalarConversion::SCException("impossible");
+            if (this->val_.d_ != 0.0) {
+                if (this->val_.d_ < std::numeric_limits<float>::min()
+                        && this->val_.d_ > -std::numeric_limits<float>::min())
+                    throw ScalarConversion::SCException("impossible");
+            }
             std::cout << static_cast<float>(this->val_.d_) << "f" << std::endl;
         }
     }
@@ -245,6 +249,38 @@ std::string ScalarConversion::getStr() const { return (this->str_); }
 int         ScalarConversion::getType() const { return (this->type_); }
 int         ScalarConversion::getPrecision() const {
     return (this->precision_);
+}
+
+void    ScalarConversion::setPrecision(std::string const& str) {
+    std::string::size_type pos_dot = str.find(".");
+    if (pos_dot == std::string::npos)
+        return;
+    std::string::size_type pos_e = str.find("e", pos_dot + 1);
+    std::string::size_type pos_f = str.find("f", pos_e + 1);
+    if (pos_dot == str.size() - 1)
+        return;
+    if (pos_f != std::string::npos)
+        if (pos_dot == str.size() - 2)
+            return;
+    if (pos_e == std::string::npos) {
+        if (pos_f == std::string::npos)
+            this->precision_ = str.size() - pos_dot - 1;
+        else
+            this->precision_ = str.size() - pos_dot - 2;
+    } else {
+        this->precision_ = pos_e - pos_dot;
+        std::string tmp = str.substr(pos_e + 1, str.size() - pos_e);
+        if (pos_f == std::string::npos)
+            tmp = str.substr(pos_e + 1, str.size() - 1 - pos_e);
+        int i = std::atoi(tmp.c_str());
+        if (i < 0) {
+            this->precision_ += std::abs(i) - 1;
+        } else {
+            this->precision_ -= std::abs(i) + 1;
+            if (this->precision_ < 1)
+                this->precision_ = 1;
+        }
+    }
 }
 
 ScalarConversion::SCException::SCException()
