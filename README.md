@@ -1,6 +1,9 @@
 # 42cpp-module-06
 
 ### ex00
+#### 小数点の桁数表示
+- [【C++】小数点の桁数を指定する方法と注意点【cout／iostream】](https://marycore.jp/prog/cpp/stream-format-float/)
+
 #### float
 - [Convert INT_MAX to float and then back to integer.](https://stackoverflow.com/questions/23420783/convert-int-max-to-float-and-then-back-to-integer/23423240)
 - [int to float conversion produces a warning?](https://stackoverflow.com/questions/7775129/int-to-float-conversion-produces-a-warning)

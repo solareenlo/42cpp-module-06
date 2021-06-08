@@ -6,7 +6,7 @@
 /*   By: tayamamo <tayamamo@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 14:00:47 by tayamamo          #+#    #+#             */
-/*   Updated: 2021/06/08 13:59:25 by tayamamo         ###   ########.fr       */
+/*   Updated: 2021/06/09 02:40:35 by tayamamo         ###   ########.fr       */
 /*   Copyright 2021                                                           */
 /* ************************************************************************** */
 
@@ -67,10 +67,12 @@ class   ScalarConversion {
     std::string const   str_;
     int                 type_;
     union UniVal        val_;
+    int                 precision_;
     static const int    base_ = 10;
     int                 getBase() const;
     std::string         getStr() const;
     int                 getType() const;
+    int                 getPrecision() const;
     bool                isValidNumber(std::string const& str);
     int                 detectType(std::string const& str);
 };

@@ -6,18 +6,19 @@
 /*   By: tayamamo <tayamamo@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 14:01:30 by tayamamo          #+#    #+#             */
-/*   Updated: 2021/06/08 17:26:17 by tayamamo         ###   ########.fr       */
+/*   Updated: 2021/06/09 02:44:23 by tayamamo         ###   ########.fr       */
 /*   Copyright 2021                                                           */
 /* ************************************************************************** */
 
 #include "ScalarConversion.hpp"
 
 ScalarConversion::ScalarConversion()
-    : is_valid_num_(false), str_("0"), type_(kChar) {
+    : is_valid_num_(false), str_("0"), type_(kChar), precision_(1) {
         this->val_.c_ = '\0';
 }
 
-ScalarConversion::ScalarConversion(std::string const& str) : str_(str) {
+ScalarConversion::ScalarConversion(std::string const& str)
+    : str_(str), precision_(1) {
     this->is_valid_num_ = this->isValidNumber(str);
     if (!this->is_valid_num_) {
         throw ScalarConversion::SCException
@@ -33,13 +34,13 @@ ScalarConversion::ScalarConversion(std::string const& str) : str_(str) {
         errno = 0;
         this->val_.f_ = std::strtof(str.c_str(), &endptr);
         if (errno)
-            throw ScalarConversion::SCException("Error: fatal");
-    } else {
+            throw ScalarConversion::SCException("Error: out of range (float)");
+    } else if (this->type_ == kDouble) {
         char    *endptr;
         errno = 0;
         this->val_.d_ = std::strtod(str.c_str(), &endptr);
         if (errno)
-            throw ScalarConversion::SCException("Error: fatal");
+            throw ScalarConversion::SCException("Error: out of range (double)");
     }
 }
 
@@ -64,7 +65,7 @@ bool    ScalarConversion::isValidNumber(std::string const& str) {
     double d = std::strtod(str.c_str(), &endptr);
     (void)d;
     if (errno)
-        throw ScalarConversion::SCException("Error: fatal");
+        throw ScalarConversion::SCException("Error: out of range (double)");
     if (*endptr && !(*endptr == 'f' && *(endptr + 1) == '\0'))
         flag = false;
     if (*endptr && str.size() == 1)
@@ -187,7 +188,8 @@ void    ScalarConversion::asInt() {
 }
 
 void    ScalarConversion::asFloat() {
-    std::cout << std::fixed << std::setprecision(1) << "float: ";
+    std::cout << std::fixed << std::setprecision(this->getPrecision());
+    std::cout << "float: ";
     try {
         int type = this->getType();
         if (type == kChar) {
@@ -203,7 +205,10 @@ void    ScalarConversion::asFloat() {
         } else if (type == kDouble) {
             if (this->val_.d_ > std::numeric_limits<float>::max())
                 throw ScalarConversion::SCException("impossible");
-            if (this->val_.d_ < std::numeric_limits<float>::min())
+            if (this->val_.d_ < -std::numeric_limits<float>::max())
+                throw ScalarConversion::SCException("impossible");
+            if (this->val_.d_ < std::numeric_limits<float>::min()
+                    && this->val_.d_ > -std::numeric_limits<float>::min())
                 throw ScalarConversion::SCException("impossible");
             std::cout << static_cast<float>(this->val_.d_) << "f" << std::endl;
         }
@@ -211,9 +216,11 @@ void    ScalarConversion::asFloat() {
     catch (ScalarConversion::SCException& e) {
         std::cout << e.what() << std::endl;
     }
+    std::cout << std::defaultfloat;
 }
 
 void    ScalarConversion::asDboule() {
+    std::cout << std::fixed << std::setprecision(this->getPrecision());
     std::cout << "double: ";
     try {
         int type = this->getType();
@@ -230,11 +237,15 @@ void    ScalarConversion::asDboule() {
     catch (ScalarConversion::SCException& e) {
         std::cout << e.what() << std::endl;
     }
+    std::cout << std::defaultfloat;
 }
 
 int         ScalarConversion::getBase() const { return (this->base_); }
 std::string ScalarConversion::getStr() const { return (this->str_); }
 int         ScalarConversion::getType() const { return (this->type_); }
+int         ScalarConversion::getPrecision() const {
+    return (this->precision_);
+}
 
 ScalarConversion::SCException::SCException()
     : std::exception(), message_("error") {}

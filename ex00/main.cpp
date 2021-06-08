@@ -6,12 +6,13 @@
 /*   By: tayamamo <tayamamo@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 14:00:00 by tayamamo          #+#    #+#             */
-/*   Updated: 2021/06/08 17:27:06 by tayamamo         ###   ########.fr       */
+/*   Updated: 2021/06/09 02:44:39 by tayamamo         ###   ########.fr       */
 /*   Copyright 2021                                                           */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <cstdlib>
+#include <cfloat>
 #include "ScalarConversion.hpp"
 
 int main(int argc, char *argv[]) {
