@@ -6,7 +6,7 @@
 /*   By: tayamamo <tayamamo@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 14:01:30 by tayamamo          #+#    #+#             */
-/*   Updated: 2021/06/08 12:29:07 by tayamamo         ###   ########.fr       */
+/*   Updated: 2021/06/08 17:05:27 by tayamamo         ###   ########.fr       */
 /*   Copyright 2021                                                           */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ ScalarConversion::ScalarConversion(std::string const& str) : str_(str) {
     }
     this->type_ = this->detectType(str);
     if (this->type_ == kChar) {
-        this->val_.c_ = *(this->str_.c_str());
+        this->val_.c_ = std::atoi(this->str_.c_str());
     } else if (this->type_ == kInt) {
         this->val_.i_ = std::atoi(str.c_str());
     } else if (this->type_ == kFloat) {
@@ -74,11 +74,13 @@ bool    ScalarConversion::isValidNumber(std::string const& str) {
 
 int ScalarConversion::detectType(std::string const& str) {
     if (!str.compare("-inff") || !str.compare("+inff")
-            || !str.compare("inff") || !str.compare("nanf"))
+            || !str.compare("inff") || !str.compare("nanf")
+            || !str.compare("+nanf") || !str.compare("-nanf"))
         return (kFloat);
 
     if (!str.compare("-inf") || !str.compare("+inf")
-            || !str.compare("inf") || !str.compare("nan"))
+            || !str.compare("inf") || !str.compare("nan")
+            || !str.compare("+nan") || !str.compare("-nan"))
         return (kDouble);
 
     char    *endptr;
@@ -109,11 +111,42 @@ int ScalarConversion::detectType(std::string const& str) {
 void    ScalarConversion::asChar() {
     std::cout << "char: ";
     try {
-        int i = std::atoi(this->str_.c_str());
-        if (i < 32 || 126 < i)
-            throw ScalarConversion::SCException("Non displayable");
-        std::cout << "'" << (static_cast<char>(std::atoi(this->str_.c_str())))
-            << "'" << std::endl;
+        int type = this->getType();
+        if (type == kChar) {
+            if (this->val_.c_ < 32 || 126 < this->val_.c_)
+                throw ScalarConversion::SCException("Non displayable");
+            std::cout << "'" << this->val_.c_ << "'" << std::endl;
+        } else if (type == kInt) {
+            if (this->val_.i_ > std::numeric_limits<char>::max()
+                    || this->val_.i_ < std::numeric_limits<char>::min())
+                throw ScalarConversion::SCException("impossible");
+            if (this->val_.i_ < 32 || 126 < this->val_.i_)
+                throw ScalarConversion::SCException("Non displayable");
+            std::cout << "'" << static_cast<char>(this->val_.i_) << "'"
+                << std::endl;
+        } else if (type == kFloat) {
+            if (this->str_ == "nanf" || this->str_ == "+nanf"
+                    || this->str_ == "-nanf")
+                throw ScalarConversion::SCException("impossible");
+            if (this->val_.f_ > std::numeric_limits<char>::max()
+                    || this->val_.f_ < std::numeric_limits<char>::min())
+                throw ScalarConversion::SCException("impossible");
+            if (this->val_.f_ < 32 || 126 < this->val_.f_)
+                throw ScalarConversion::SCException("Non displayable");
+            std::cout << "'" << static_cast<char>(this->val_.f_) << "'"
+                << std::endl;
+        } else if (type == kDouble) {
+            if (this->str_ == "nan" || this->str_ == "+nan"
+                    || this->str_ == "-nan")
+                throw ScalarConversion::SCException("impossible");
+            if (this->val_.d_ > std::numeric_limits<char>::max()
+                    || this->val_.d_ < std::numeric_limits<char>::min())
+                throw ScalarConversion::SCException("impossible");
+            if (this->val_.d_ < 32 || 126 < this->val_.d_)
+                throw ScalarConversion::SCException("Non displayable");
+            std::cout << "'" << static_cast<char>(this->val_.d_) << "'"
+                << std::endl;
+        }
     }
     catch (ScalarConversion::SCException& e) {
         std::cout << e.what() << std::endl;
@@ -123,14 +156,30 @@ void    ScalarConversion::asChar() {
 void    ScalarConversion::asInt() {
     std::cout << "int: ";
     try {
-        char    *endptr;
-        errno = 0;
-        int64_t l = std::strtol(this->str_.c_str(), &endptr, this->getBase());
-        if (l > std::numeric_limits<int>::max()
-                || l < std::numeric_limits<int>::min()) {
-            throw ScalarConversion::SCException("impossible");
+        int type = this->getType();
+        if (type == kChar) {
+            std::cout << static_cast<int>(this->val_.c_) << std::endl;
+        } else if (type == kInt) {
+            std::cout << this->val_.i_ << std::endl;
+        } else if (type == kFloat) {
+            if (this->str_ == "nanf" || this->str_ == "+nanf"
+                    || this->str_ == "-nanf")
+                throw ScalarConversion::SCException("impossible");
+            if (this->val_.f_ > (1 << 24) - 1)
+                throw ScalarConversion::SCException("impossible");
+            if (this->val_.f_ < -(1 << 24) + 1)
+                throw ScalarConversion::SCException("impossible");
+            std::cout << static_cast<int>(this->val_.f_) << std::endl;
+        } else if (type == kDouble) {
+            if (this->str_ == "nan" || this->str_ == "+nan"
+                    || this->str_ == "-nan")
+                throw ScalarConversion::SCException("impossible");
+            if (this->val_.d_ > std::numeric_limits<int>::max())
+                throw ScalarConversion::SCException("impossible");
+            if (this->val_.d_ < std::numeric_limits<int>::min())
+                throw ScalarConversion::SCException("impossible");
+            std::cout << static_cast<int>(this->val_.d_) << std::endl;
         }
-        std::cout << static_cast<int>(l) << std::endl;
     }
     catch (ScalarConversion::SCException& e) {
         std::cout << e.what() << std::endl;
@@ -138,12 +187,26 @@ void    ScalarConversion::asInt() {
 }
 
 void    ScalarConversion::asFloat() {
-    std::cout << "float: ";
+    std::cout << std::fixed << std::setprecision(1) << "float: ";
     try {
-        char    *endptr;
-        errno = 0;
-        float f = std::strtof(this->str_.c_str(), &endptr);
-        std::cout << f << std::endl;
+        int type = this->getType();
+        if (type == kChar) {
+            std::cout << static_cast<float>(this->val_.c_) << "f" << std::endl;
+        } else if (type == kInt) {
+            if (this->val_.i_ > (1 << 24) - 1)
+                throw ScalarConversion::SCException("impossible");
+            if (this->val_.i_ < -(1 << 24) + 1)
+                throw ScalarConversion::SCException("impossible");
+            std::cout << static_cast<float>(this->val_.i_) << "f" << std::endl;
+        } else if (type == kFloat) {
+            std::cout << this->val_.f_ << "f" << std::endl;
+        } else if (type == kDouble) {
+            if (this->val_.d_ > std::numeric_limits<float>::max())
+                throw ScalarConversion::SCException("impossible");
+            if (this->val_.d_ < std::numeric_limits<float>::min())
+                throw ScalarConversion::SCException("impossible");
+            std::cout << static_cast<float>(this->val_.d_) << "f" << std::endl;
+        }
     }
     catch (ScalarConversion::SCException& e) {
         std::cout << e.what() << std::endl;
@@ -153,10 +216,16 @@ void    ScalarConversion::asFloat() {
 void    ScalarConversion::asDboule() {
     std::cout << "double: ";
     try {
-        char    *endptr;
-        errno = 0;
-        double  d = std::strtod(this->str_.c_str(), &endptr);
-        std::cout << d << std::endl;
+        int type = this->getType();
+        if (type == kChar) {
+            std::cout << static_cast<double>(this->val_.c_) << std::endl;
+        } else if (type == kInt) {
+            std::cout << static_cast<double>(this->val_.i_) << std::endl;
+        } else if (type == kFloat) {
+            std::cout << static_cast<double>(this->val_.f_) << std::endl;
+        } else if (type == kDouble) {
+            std::cout << this->val_.d_ << std::endl;
+        }
     }
     catch (ScalarConversion::SCException& e) {
         std::cout << e.what() << std::endl;

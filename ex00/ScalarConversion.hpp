@@ -6,7 +6,7 @@
 /*   By: tayamamo <tayamamo@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 14:00:47 by tayamamo          #+#    #+#             */
-/*   Updated: 2021/06/08 12:29:10 by tayamamo         ###   ########.fr       */
+/*   Updated: 2021/06/08 13:59:25 by tayamamo         ###   ########.fr       */
 /*   Copyright 2021                                                           */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define EX00_SCALARCONVERSION_HPP_
 
 #include <iostream>
+#include <iomanip>
 #include <limits>
 #include <string>
 #include <cstring>

@@ -6,7 +6,7 @@
 #    By: tayamamo <tayamamo@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/06 14:01:54 by tayamamo          #+#    #+#              #
-#    Updated: 2021/06/06 14:01:54 by tayamamo         ###   ########.fr        #
+#    Updated: 2021/06/08 16:35:51 by tayamamo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ OBJ := ScalarConversion.o main.o
 
 # DO NOT ADD OR MODIFY ANY LINES ABOVE THIS -- run 'make source' to add files
 
-NAME := scalar
+NAME := convert
 
 CC := clang++
 CFLAGS := -std=c++98 -Wall -Wextra -Werror
