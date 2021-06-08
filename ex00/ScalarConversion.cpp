@@ -6,7 +6,7 @@
 /*   By: tayamamo <tayamamo@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 14:01:30 by tayamamo          #+#    #+#             */
-/*   Updated: 2021/06/08 17:05:27 by tayamamo         ###   ########.fr       */
+/*   Updated: 2021/06/08 17:26:17 by tayamamo         ###   ########.fr       */
 /*   Copyright 2021                                                           */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int ScalarConversion::detectType(std::string const& str) {
     errno = 0;
     if (errno)
         throw ScalarConversion::SCException("Error: fatal");
-    if (*endptr == '.')
+    if (*endptr == '.' || *endptr == 'e')
         return (kDouble);
 
     if (i > std::numeric_limits<char>::max()
