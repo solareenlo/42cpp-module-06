@@ -1,5 +1,9 @@
 # 42cpp-module-06
 
+### ex02
+- [dynamic_cast](https://en.cppreference.com/w/cpp/language/dynamic_cast)
+- [ダウンキャスト(dynamic_cast)](http://yohshiy.blog.fc2.com/blog-entry-15.html)
+
 ### ex01
 - [C++と 4 つのキャスト演算](https://www.yunabe.jp/docs/cpp_casts.html)
   - static_cast: 暗黙の型変換が行われることを明示的に示す演算子
