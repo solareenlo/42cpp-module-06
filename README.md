@@ -1,5 +1,8 @@
 # 42cpp-module-06
 
+### ex01
+- [C++と 4 つのキャスト演算](https://www.yunabe.jp/docs/cpp_casts.html)
+
 ### ex00
 #### 方針
 - `-inf` < `-DBL_MAX` < `-inff` < `-FLT_MAX` < `INT_MIN` < `CHR_MIN` < `-FLT_MIN` < `-DBL_MIN` < `0` < `DBL_MIN` < `FLT_MIN` < `CHR_MIN` < `INT_MAX` < `FLT_MAX` < `+inff` < `DBL_MAX` < `+inf`
