@@ -2,6 +2,11 @@
 
 ### ex01
 - [C++と 4 つのキャスト演算](https://www.yunabe.jp/docs/cpp_casts.html)
+  - static_cast: 暗黙の型変換が行われることを明示的に示す演算子
+  - dynamic_cast: base class のポインタを derived class のポインタにキャストする演算子
+  - reinterpret_cast: ポインタ型をたのポインタ型に強制的に変換する演算子
+    - または，整数型を任意の型のポインタに変換する演算子
+  - const_cast: ポインタ型，参照型の const や volatile を無効化する演算子
 
 ### ex00
 #### 方針
