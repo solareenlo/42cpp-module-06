@@ -5,15 +5,15 @@
 #                                                     +:+ +:+         +:+      #
 #    By: tayamamo <tayamamo@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/06/09 12:28:02 by tayamamo          #+#    #+#              #
-#    Updated: 2021/06/09 12:28:34 by tayamamo         ###   ########.fr        #
+#    Created: 2021/06/09 13:08:30 by tayamamo          #+#    #+#              #
+#    Updated: 2021/06/09 13:08:30 by tayamamo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# Makefile for philo_one, updated Wed Jun  9 12:28:02 JST 2021
+# Makefile for philo_one, updated Wed Jun  9 13:08:30 JST 2021
 
-SRC := A.cpp Base.cpp main.cpp
-OBJ := A.o Base.o main.o
+SRC := A.cpp B.cpp Base.cpp C.cpp main.cpp
+OBJ := A.o B.o Base.o C.o main.o
 
 # DO NOT ADD OR MODIFY ANY LINES ABOVE THIS -- run 'make source' to add files
 

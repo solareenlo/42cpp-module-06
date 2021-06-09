@@ -6,7 +6,7 @@
 /*   By: tayamamo <tayamamo@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 12:32:50 by tayamamo          #+#    #+#             */
-/*   Updated: 2021/06/09 12:34:01 by tayamamo         ###   ########.fr       */
+/*   Updated: 2021/06/09 12:41:19 by tayamamo         ###   ########.fr       */
 /*   Copyright 2021                                                           */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "Base.hpp"
 
 class   C : public Base {
+ public:
     C();
     C(C const& src);
     ~C();
