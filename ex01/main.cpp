@@ -6,7 +6,7 @@
 /*   By: tayamamo <tayamamo@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/09 06:59:56 by tayamamo          #+#    #+#             */
-/*   Updated: 2021/06/09 11:49:13 by tayamamo         ###   ########.fr       */
+/*   Updated: 2021/06/10 18:03:30 by tayamamo         ###   ########.fr       */
 /*   Copyright 2021                                                           */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void*   serialize(void) {
     Data    *pdata = new Data();
     srand(time(NULL));
 
-    for (size_t i = 0; i < 16; i++) {
+    for (size_t i = 0; i < 8; i++) {
         pdata->str1.push_back(ASCII[rand() % ASCII_SIZE]);
         pdata->str2.push_back(ASCII[rand() % ASCII_SIZE]);
     }
